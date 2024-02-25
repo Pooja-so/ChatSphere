@@ -1,4 +1,5 @@
 import express from "express";
+import { signup, login, logout } from "../controllers/auth.controller.js";
 const router = express.Router();
 
 //* Before controller
@@ -11,9 +12,10 @@ const router = express.Router();
 //* After controllers
 
 // 2.1 Calling controller "signup" when the address bar has URL /api/auth/signup
-router.get("/signup", signup);
-// 2.1 Calling controller "login" when the address bar has URL /api/auth/signup
-router.get("/login", login);
-router.get("/logout", logout);
+router.post("/signup", signup);
+// 2.2 Calling controller "login" when the address bar has URL /api/auth/login
+router.post("/login", login);
+// 2.3 Calling controller "logout" when the address bar has URL /api/auth/logout
+router.post("/logout", logout);
 
 export default router;
