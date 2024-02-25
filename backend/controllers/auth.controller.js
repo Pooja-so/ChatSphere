@@ -59,11 +59,48 @@ const signup = async (req, res) => {
 };
 
 const login = async (req, res) => {
-  console.log("login user");
+  try {
+    // Step1: get input from the user Form
+    const { username, password } = req.body;
+
+    // Step 2.1: Check if the user with username exists or not
+    const user = await User.findOne({ username });
+
+    // Step 2.2: Check if the password is correct or not. In case if user doesn't exists, we'll pass a string in function of bcrypt so that it doesn;t throw any error
+    const isPasswordCorrect = await bcrypt.compare(
+      password,
+      user?.password || ""
+    );
+
+    //Step3: Return error in response if either user doesn't exist or password is in-correct
+    if (!user || !isPasswordCorrect) {
+      return res.status(400).json({ error: "Invalid username or password" });
+    }
+
+    //Step4: Generate JWT token if user logs in successfully
+    generateTokenAndSetCookie(user._id, res);
+
+    //Step5: (Imp) Send response
+    res.status(200).json({
+      _id: user._id,
+      fullName: user.fullName,
+      username: user.username,
+      profilePic: user.profilePic,
+    });
+  } catch (error) {
+    console.log("Error in login controller ", error.message);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 };
 
 const logout = async (req, res) => {
-  console.log("logout user");
+  try {
+    res.cookie("jwt", "", { maxAge: 0 });
+    res.status(200).json({ message: "Logged Out successfully" });
+  } catch (error) {
+    console.log("Error in logout controller", error.message);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 };
 
 export { signup, login, logout };
