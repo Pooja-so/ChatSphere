@@ -1,9 +1,11 @@
 //* ES6 module */
 import express from "express";
 import dotenv from "dotenv";
+import cookieParser from "cookie-parser";
 
 // Compulsory to write .js extension otherwise it will not work
 import authRoutes from "./routes/auth.routes.js";
+import messageRoutes from "./routes/message.routes.js";
 import connectToMongoDB from "./db/connectToMongoDB.js";
 
 const app = express();
@@ -11,8 +13,11 @@ const PORT = process.env.PORT || 5000;
 
 dotenv.config();
 app.use(express.json()); // to parse incomming request with JSON payload (from req.body)
+app.use(cookieParser());
+
 //* Calling middleware whenever the URL starts with /api/auth
 app.use("/api/auth", authRoutes); // 1. calling authRoutes which is in auth.routes.js file when URL starts with /api/auth
+app.use("/api/messages", messageRoutes);
 
 // Setting routes
 // app.get("/", (req, res) => {
