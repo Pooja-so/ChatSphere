@@ -7,6 +7,7 @@ const sendMessage = async (req, res) => {
     const { id: receiverId } = req.params; // Got from URL
     const senderId = req.user._id; // Got as we set req.user=user in  protectRoute function
 
+    // console.log("Sender", req.user);
     // Finding existing conversations between the sender and receiver
     let conversation = await Conversation.findOne({
       participants: { $all: [senderId, receiverId] },

@@ -6,6 +6,8 @@ import cookieParser from "cookie-parser";
 // Compulsory to write .js extension otherwise it will not work
 import authRoutes from "./routes/auth.routes.js";
 import messageRoutes from "./routes/message.routes.js";
+import userRoutes from "./routes/user.routes.js";
+
 import connectToMongoDB from "./db/connectToMongoDB.js";
 
 const app = express();
@@ -16,8 +18,10 @@ app.use(express.json()); // to parse incomming request with JSON payload (from r
 app.use(cookieParser());
 
 //* Calling middleware whenever the URL starts with /api/auth
-app.use("/api/auth", authRoutes); // 1. calling authRoutes which is in auth.routes.js file when URL starts with /api/auth
+// 1. calling authRoutes which is in auth.routes.js file when URL starts with /api/auth
+app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
+app.use("/api/users", userRoutes);
 
 // Setting routes
 // app.get("/", (req, res) => {
